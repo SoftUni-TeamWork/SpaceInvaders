@@ -4,6 +4,11 @@
 
 function Play() {
 
+    //бекграунд на играта
+    var background = new Image();
+    background.onload = function() {};
+    background.src = "./images/Background.png";
+    
     // Създаваме нов обект от тип - кораб. Позиционираме го в долната част на екрана.
     game.ship = new Ship(game.width / 2, game.borders.bottom);
 
@@ -24,7 +29,7 @@ function Play() {
     this.draw = function(game, dt, ctx) {
 
         ctx.clearRect(0, 0, game.width, game.height);
-
+        ctx.drawImage(background, 0, 0);
         ctx.fillStyle = '#555555';
         ctx.fillRect(game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
 
