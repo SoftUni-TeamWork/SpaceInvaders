@@ -15,9 +15,7 @@ function Play() {
     game.lastEnemyAppear = (new Date()).valueOf();
 
 	var enemyImg=new Image(33,42);
-	enemyImg.onload=function (){
-
-	};
+	enemyImg.onload=function (){};
 	enemyImg.src='./images/Enemy1.png';
 
     /*
@@ -37,10 +35,11 @@ function Play() {
         }
         
         ctx.fillStyle='red';
-	    ctx.drawImage(enemyImg,0, 10);
+
         for(var j=0;j<game.enemies.length;j++){
             var enemy=game.enemies[j];
-//            ctx.fillRect(enemy.x,enemy.y,50,50);
+			//ctx.fillRect(enemy.x,enemy.y,50,50);
+	        ctx.drawImage(enemyImg,enemy.x,enemy.y);
             enemyImg.onload();
         }
 
