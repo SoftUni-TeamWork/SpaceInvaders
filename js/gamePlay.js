@@ -120,7 +120,7 @@ function Play() {
 */
     this.newEnemy= function() {
             var newX=Math.random()*750;
-            game.enemies.push(new Enemy(newX, 20, 40, 10));
+            game.enemies.push(new Enemy(newX, 20, 50, 10));
             game.lastEnemyAppear = (new Date()).valueOf();
         
     };
