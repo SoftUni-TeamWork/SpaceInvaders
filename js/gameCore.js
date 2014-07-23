@@ -14,6 +14,7 @@ function GameCore(){
 	this.bullets = [];
 	this.stateStack = [];
 	this.enemies = [];
+        this.lastEnemyAppear=null;
 	
 	this.pressedKeys = {};
 	this.gameCanvas =  null;
