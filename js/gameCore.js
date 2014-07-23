@@ -13,6 +13,7 @@ function GameCore(){
 	this.ship=null;
 	this.bullets = [];
 	this.stateStack = [];
+	this.enemies = [];
 	
 	this.pressedKeys = {};
 	this.gameCanvas =  null;
@@ -31,7 +32,6 @@ function GameCore(){
 		}
 	};
 }
-
 
 function initGame(){
 	
@@ -86,7 +86,6 @@ function startGame(){
  */
 
 function MainLoop(game){
-	
 	if(currentState()){
 		var time = 0.04;
 		var ctx = game.gameCanvas.getContext("2d");
@@ -107,7 +106,8 @@ function MainLoop(game){
 function currentState(){
 	if(game.stateStack.length > 0){
 		return game.stateStack[game.stateStack.length - 1];
-	}else{
+	}
+	else{
 		return null;
 	}
 }
@@ -118,11 +118,11 @@ function currentState(){
  */
 
 function setState(state){
-	
-	if(currentState()) game.stateStack.pop();
+	if(currentState()){	
+		game.stateStack.pop();
+	}
 	
 	game.stateStack.push(state);
-	
 }
 
 /*

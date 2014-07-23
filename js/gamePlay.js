@@ -102,3 +102,11 @@ function Bullet(x,y,velocity){
 	this.y=y;
 	this.velocity=velocity;
 }
+
+function Enemy(x, y, velocity, score){
+	this.x = x;
+	this.y = y;
+	this.velocity = velocity;
+	this.score = score; // different enemy will bring different score
+	this.isHitted = false;
+}
