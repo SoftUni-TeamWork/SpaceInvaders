@@ -33,7 +33,7 @@ function Play() {
         ctx.fillStyle='red';
         for(var j=0;j<game.enemies.length;j++){
             var enemy=game.enemies[j];
-            ctx.fillRect(enemy.x,enemy.y,30,30);
+            ctx.fillRect(enemy.x,enemy.y,50,50);
         }
 
     };
