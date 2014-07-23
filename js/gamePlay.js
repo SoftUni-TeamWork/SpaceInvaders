@@ -13,7 +13,13 @@ function Play() {
 
     game.enemies.push(new Enemy((Math.random() * 100), 10, 70, 10));
     game.lastEnemyAppear = (new Date()).valueOf();
-    
+
+	var enemyImg=new Image(33,42);
+	enemyImg.onload=function (){
+
+	};
+	enemyImg.src='./images/Enemy1.png';
+
     /*
      * Този метод изчиства игралното поле, оцветява кораба и патроните.
      */
@@ -31,11 +37,7 @@ function Play() {
         }
         
         ctx.fillStyle='red';
-        var enemyImg=new Image(33,42);
-        enemyImg.onload=function (){
-            ctx.drawImage(enemyImg,(Math.random() * 100), 10);
-        };
-        enemyImg.src='./images/Enemy1.png';
+	    ctx.drawImage(enemyImg,0, 10);
         for(var j=0;j<game.enemies.length;j++){
             var enemy=game.enemies[j];
 //            ctx.fillRect(enemy.x,enemy.y,50,50);
@@ -112,6 +114,9 @@ function Play() {
             game.lastShootTime = (new Date()).valueOf();
         }
     };
+
+
+
     this.newEnemy= function() {
             var newX=Math.random()*750;
             game.enemies.push(new Enemy(newX, 20, 50, 10));
