@@ -34,11 +34,8 @@ function Play() {
             ctx.fillRect(bullet.x, bullet.y - 2, 2, 6);
         }
         
-        ctx.fillStyle='red';
-
         for(var j=0;j<game.enemies.length;j++){
             var enemy=game.enemies[j];
-			//ctx.fillRect(enemy.x,enemy.y,50,50);
 	        ctx.drawImage(enemyImg,enemy.x,enemy.y);
             enemyImg.onload();
         }
