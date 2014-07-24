@@ -13,7 +13,7 @@ function Play() {
     var background = new Image();
     background.onload = function() {};
     background.src = "./images/Background.png";
-    
+
     // Създаваме нов обект от тип - кораб. Позиционираме го в долната част на екрана.
     game.ship = new Ship(game.width / 2, game.borders.bottom);
 
@@ -24,13 +24,13 @@ function Play() {
     game.enemies.push(new Enemy((Math.random() * 100), 10, 70, 10));
     game.lastEnemyAppear = (new Date()).valueOf();
 
-	var enemyImg=new Image(33,42);
-	enemyImg.onload=function (){};
-	enemyImg.src='./images/Enemy1.png';
-        
-    var ourShipImg=new Image(45,43);
-    ourShipImg.onload=function (){};
-    ourShipImg.src='./images/Ship.png';
+    var enemyImg = new Image(33, 42);
+    enemyImg.onload = function() {};
+    enemyImg.src = './images/Enemy1.png';
+
+    var ourShipImg = new Image(45, 43);
+    ourShipImg.onload = function() {};
+    ourShipImg.src = './images/Ship.png';
 
     /*
      * Този метод изчиства игралното поле, оцветява кораба и патроните.
@@ -40,17 +40,17 @@ function Play() {
         ctx.clearRect(0, 0, game.width, game.height);
         ctx.drawImage(background, 0, 0);
         ctx.fillStyle = '#555555';
-//        ctx.fillRect(game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
-        ctx.drawImage(ourShipImg,game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
+        //        ctx.fillRect(game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
+        ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
         ctx.fillStyle = '#ff0000';
         for (var i = 0; i < game.bullets.length; i++) {
             var bullet = game.bullets[i];
             ctx.fillRect(bullet.x, bullet.y - 2, 2, 6);
         }
-        
-        for(var j=0;j<game.enemies.length;j++){
-            var enemy=game.enemies[j];
-	        ctx.drawImage(enemyImg,enemy.x,enemy.y);
+
+        for (var j = 0; j < game.enemies.length; j++) {
+            var enemy = game.enemies[j];
+            ctx.drawImage(enemyImg, enemy.x, enemy.y);
             enemyImg.onload();
         }
 
@@ -89,7 +89,7 @@ function Play() {
             if (bullet.y < 5)
                 game.bullets.splice(i--, 1);
         }
-        
+
         for (var j = 0; j < game.enemies.length; j++) {
             var enemy = game.enemies[j];
             enemy.y += Math.round(dt * enemy.velocity);
@@ -97,19 +97,36 @@ function Play() {
                 game.enemies.splice(j--, 1);
             }
         }
-        if(((new Date()).valueOf() - game.lastEnemyAppear) > 2000){
+
+        if (((new Date()).valueOf() - game.lastEnemyAppear) > 2000) {
             this.newEnemy();
         }
-        
-		if(currentScore > currentLevel * 100){
-			currentLevel++;
-		}
-		if(currentLevel == 5){
-			//Call the boss
-		}
-		if(currentLives == 0){
-			//End game
-		}
+
+        if (currentScore > currentLevel * 100) {
+            currentLevel++;
+        }
+
+        if (currentLevel == 5) {
+            //Call the boss
+        }
+
+        if (currentLives == 0) {
+            //End game
+        }
+
+        /**
+         * This feature destroys the enemy
+         */
+        for (var bulletIndex = 0; bulletIndex < game.bullets.length; bulletIndex++) {
+            for (var enemyIndex = 0; enemyIndex < game.enemies.length; enemyIndex++) {
+                bullet = game.bullets[bulletIndex];
+                enemy = game.enemies[enemyIndex];
+                if (bullet.y <= enemy.y + 30 && (bullet.x >= enemy.x && bullet.x <= enemy.x + 40)) {
+                    game.enemies.splice(enemyIndex, 1);
+                    game.bullets.splice(enemyIndex, 1);
+                }
+            }
+        }
     };
 
 
@@ -122,25 +139,24 @@ function Play() {
     };
 
     /*
-     * С този метод се симулира изстрелването на патрон. Като първо се проверява дали в рамките 
-     * на последните 200ms не е изстрелят вече един, ако не е - се създава нов обект - патрон 
+     * С този метод се симулира изстрелването на патрон. Като първо се проверява дали в рамките
+     * на последните 200ms не е изстрелят вече един, ако не е - се създава нов обект - патрон
      * и се ъпдейтва таймера.
      */
     this.fireRocket = function() {
-        if (game.lastShootTime === null || ((new Date()).valueOf() - game.lastShootTime) > 200)
-        {
+        if (game.lastShootTime === null || ((new Date()).valueOf() - game.lastShootTime) > 200) {
             game.bullets.push(new Bullet(game.ship.x, game.ship.y - 12, 150));
             game.lastShootTime = (new Date()).valueOf();
         }
     };
 
-/* с този метод се извиква и създава нова ГАД!
-*/
-    this.newEnemy= function() {
-            var newX=Math.random()*750;
-            game.enemies.push(new Enemy(newX, 20, (currentLevel * 50), (currentLevel * 10)));
-            game.lastEnemyAppear = (new Date()).valueOf();
-        
+    /* с този метод се извиква и създава нова ГАД!
+     */
+    this.newEnemy = function() {
+        var newX = Math.random() * 750;
+        game.enemies.push(new Enemy(newX, 20, (currentLevel * 50), (currentLevel * 10)));
+        game.lastEnemyAppear = (new Date()).valueOf();
+
     };
 }
 
@@ -158,7 +174,7 @@ function Ship(x, y) {
 
 /*
  * Функция за създаване на патрони
- * Това са патроните, които се изстрелват от кораба, имат позиция 
+ * Това са патроните, които се изстрелват от кораба, имат позиция
  * както и скорост на движение
  */
 function Bullet(x, y, velocity) {
