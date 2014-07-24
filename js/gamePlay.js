@@ -27,6 +27,10 @@ function Play() {
 	var enemyImg=new Image(33,42);
 	enemyImg.onload=function (){};
 	enemyImg.src='./images/Enemy1.png';
+        
+    var ourShipImg=new Image(45,43);
+    ourShipImg.onload=function (){};
+    ourShipImg.src='./images/Ship.png';
 
     /*
      * Този метод изчиства игралното поле, оцветява кораба и патроните.
@@ -36,8 +40,8 @@ function Play() {
         ctx.clearRect(0, 0, game.width, game.height);
         ctx.drawImage(background, 0, 0);
         ctx.fillStyle = '#555555';
-        ctx.fillRect(game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
-
+//        ctx.fillRect(game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
+        ctx.drawImage(ourShipImg,game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
         ctx.fillStyle = '#ff0000';
         for (var i = 0; i < game.bullets.length; i++) {
             var bullet = game.bullets[i];
@@ -148,8 +152,8 @@ function Play() {
 function Ship(x, y) {
     this.x = x;
     this.y = y;
-    this.width = 20;
-    this.height = 16;
+    this.width = 45;
+    this.height = 43;
 }
 
 /*
