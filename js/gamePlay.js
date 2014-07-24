@@ -1,3 +1,8 @@
+// текущи стойности на играта
+var currentScore = 0;
+var currentLevel = 1;
+var currentLives = 3;
+
 /*
  * Тук създаваме обект Play
  */
@@ -92,6 +97,15 @@ function Play() {
             this.newEnemy();
         }
         
+		if(currentScore > currentLevel * 100){
+			currentLevel++;
+		}
+		if(currentLevel == 5){
+			//Call the boss
+		}
+		if(currentLives == 0){
+			//End game
+		}
     };
 
 
@@ -120,7 +134,7 @@ function Play() {
 */
     this.newEnemy= function() {
             var newX=Math.random()*750;
-            game.enemies.push(new Enemy(newX, 20, 50, 10));
+            game.enemies.push(new Enemy(newX, 20, (currentLevel * 50), (currentLevel * 10)));
             game.lastEnemyAppear = (new Date()).valueOf();
         
     };
