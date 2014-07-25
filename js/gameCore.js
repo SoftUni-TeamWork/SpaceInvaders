@@ -12,7 +12,7 @@ function GameCore(){
 	
 	this.playerScore=0;
 	this.playerShipHealth=50;
-	this.currentLevel=4;
+	this.currentLevel=1;
 	this.currentLives=3;
 	this.riseLevelOnScore=10;
 

@@ -186,7 +186,7 @@ function Play() {
 		        }
 
 				if (game.boss != null) {
-					if ((bullet.x >= game.boss.x) && (bullet.x <= (game.boss.x + game.boss.width) ) && (bullet.y <= (game.boss.y + (game.boss.height - 20) )) ) {
+					if ((bullet.x >= game.boss.x) && ((bullet.x <= (game.boss.x + game.boss.width / 2) ) || (bullet.x <= (game.boss.x - game.boss.width) )) && (bullet.y <= (game.boss.y + (game.boss.height - 20) )) ) {
 						game.bullets.splice(i--,1);
 						game.boss.helth--;
 					}
@@ -332,5 +332,5 @@ function Boss(x, y, score, lastMovement) {
 	this.height = 118;
     this.score = score;
 	this.lastMovement = lastMovement;
-	this.helth = 10;
+	this.helth = 30;
 }
