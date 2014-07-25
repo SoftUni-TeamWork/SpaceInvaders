@@ -87,13 +87,13 @@ function Play() {
         ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
 		
 		if (game.boss != null) {
-			if (game.boss.helth > 0)
+			if (game.boss.health > 0)
 			{
 				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), game.boss.y - (game.ship.height / 2), game.boss.width, game.boss.height);
-				var bossHelth = 'Boss Helth: ' + game.boss.helth;
-				ctx.fillText(bossHelth, ((game.width / 2) - 10), game.borders.top + 30);
+				var bossHealth = 'Boss Health: ' + game.boss.health;
+				ctx.fillText(bossHealth, ((game.width / 2) - 10), game.borders.top + 30);
 			}
-			if (game.boss.helth == 0)
+			if (game.boss.health == 0)
 				game.boss = null;
 		}
 
@@ -190,7 +190,7 @@ function Play() {
 				if (game.boss != null) {
 					if ((bullet.x >= game.boss.x) && ((bullet.x <= (game.boss.x + game.boss.width / 2) ) || (bullet.x <= (game.boss.x - game.boss.width) )) && (bullet.y <= (game.boss.y + (game.boss.height - 20) )) ) {
 						game.bullets.splice(i--,1);
-						game.boss.helth--;
+						game.boss.health--;
 					}
 				}
 	        }
@@ -210,11 +210,11 @@ function Play() {
         }
 		
 		if (game.playerShipHealth < 0) {
-	        game.playerShipHealth = 50;
+	        game.playerShipHealth = 20;
 	        game.currentLives--;
         }
 
-        if (game.currentLevel == 5 || game.currentLevel == 10) {
+        if (game.currentLevel % 5 === 0) {
             this.boss();
         }
 
@@ -334,5 +334,5 @@ function Boss(x, y, score, lastMovement) {
 	this.height = 118;
     this.score = score;
 	this.lastMovement = lastMovement;
-	this.helth = 30;
+	this.health = 30;
 }
