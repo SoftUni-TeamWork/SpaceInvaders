@@ -75,7 +75,7 @@ function Play() {
 		var textYposition = game.borders.top + 10;
 		ctx.font="14px Arial";
 		ctx.fillStyle = '#ffffff';
-		var info = "Live: " + game.currentLives+" , Health: "+ game.playerShipHealth;
+		var info = "Lives: " + game.currentLives+" , Health: "+ game.playerShipHealth;
 		ctx.textAlign = "left";
 		ctx.fillText(info, game.borders.left, textYposition);
 		info = "Score: " + game.playerScore + ", Level: " + game.currentLevel;
