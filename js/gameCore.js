@@ -16,13 +16,13 @@ function GameCore(){
 	this.intervalId=0;
 	this.lastShootTime=null;
 
-	this.defaultShipHealth=3;
+	this.defaultShipHealth=30;
 
 	this.playerScore=0;
 	this.playerShipHealth=this.defaultShipHealth;
 	this.currentLevel=1;
 	this.currentLives=3;
-	this.riseLevelOnScore=10;
+	this.riseLevelOnScore=20;
 
 	this.ship=null;
 	this.boss = null;

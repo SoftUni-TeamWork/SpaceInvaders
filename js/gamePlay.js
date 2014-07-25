@@ -221,7 +221,7 @@ function Play() {
 			game.currentLives--;
 		}
 
-		if (game.currentLevel > 2) {
+		if (game.currentLevel > 4) {
 
 			this.boss();
 
