@@ -17,12 +17,12 @@ function GameCore(){
 	this.riseLevelOnScore=10;
 
 	this.ship=null;
-	this.shipMoveSpeed=6;
+	this.shipMoveSpeed=4;
 	this.bullets = [];
 	this.bulletSpeed=10;
 	this.stateStack = [];
 	this.enemies = [];
-	this.enemiesFallingSpeed=2;
+	this.enemiesFallingSpeed=1;
     this.lastEnemyAppear=null;
 	
 	this.pressedKeys = {};
