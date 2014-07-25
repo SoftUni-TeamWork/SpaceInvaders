@@ -149,6 +149,7 @@ function Play() {
 
 		        if (enemy.y >= game.borders.bottom) {
 			        game.enemies.splice(j--, 1);
+					game.playerShipHealth--; //If the player haven't destroyed the enemy on time, his health is decreasing
 		        }
 
 	        }
@@ -265,5 +266,4 @@ function Enemy(x, y, velocity, score) {
 	this.width = 29;
 	this.height = 36;
     this.score = score; // different enemy will bring different score
-    this.isHitted = false;
 }
