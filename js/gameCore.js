@@ -86,7 +86,7 @@ function startGame(){
 	this.intervalId=setInterval(
 		function(){
 			MainLoop(game);
-		},25);
+		},40);
 }
 
 /*
