@@ -89,9 +89,9 @@ function Play() {
 		if (game.boss != null) {
 			if (game.boss.helth > 0)
 			{
-				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), 20, game.boss.width, game.boss.height);
+				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), game.boss.y - (game.ship.height / 2), game.boss.width, game.boss.height);
 				var bossHelth = 'Boss Helth: ' + game.boss.helth;
-				ctx.fillText(bossHelth, ((game.width / 2) - 15), game.borders.top + 30);
+				ctx.fillText(bossHelth, ((game.width / 2) - 10), game.borders.top + 30);
 			}
 			if (game.boss.helth == 0)
 				game.boss = null;
