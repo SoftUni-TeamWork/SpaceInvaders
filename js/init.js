@@ -1,10 +1,13 @@
-/*
- * Създаваме нова глобална променлива "game" като инстанция на обект (клас): "GameCore". 
- */ 
+/**
+ *
+ * We create new global variable "game" as instance of class: "GameCore".
+ *
+ */
+
 var game = new GameCore();
 
-// Инициализираме играта.
+// Game initialization
 initGame();
 
-// Пускаме играта.
+// Running the game
 startGame();

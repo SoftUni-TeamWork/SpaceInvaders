@@ -3,8 +3,8 @@ SampleGame
 
 
 <p>
-Използвайте този линк за да тествате директно от GitHub играта:
-<a href="http://htmlpreview.github.io/?https://github.com/SoftUni-TeamWork/SampleGame/blob/master/index.html" target="_blank"> линк </a>
+You can use this link to test directly the game from GitHub:
+<a href="http://htmlpreview.github.io/?https://github.com/SoftUni-TeamWork/SampleGame/blob/master/index.html" target="_blank"> link </a>
 </p>
 
 
@@ -12,9 +12,9 @@ CHANGELOG:
 =========
 <p>
 <ul>
-<li>0.3 Пренаписан е голяма част GamePlay.js. добавени са параметри в GameCode.js, подобрени са изображенията;</li>
-<li>0.2 Добавени са врагове и декорация на бекграунд-а;</li>
-<li>0.1 Базова версия;</li>
+<li>0.3 Biggest part of GamePlay.js. is rewritten, new parameters are added into GameCode.js, most of the images are improved;</li>
+<li>0.2 Enemies are added into the game</li>
+<li>0.1 Basic version</li>
 </ul>
 </p>
 
@@ -25,12 +25,7 @@ TODO:
 =========
 <p>
 <ol>
-<li>Да решим на какъв език да бъде играта БГ или ЕН, също и на какъв език да бъде служебната информация (коментари в кода, информацията тук)</li>
-<li>Много добре би било да пишем коментари в кода, написал съм няколко в gamePlay.js за пример, в JAVA style са, но няма проблем да ги ползваме и в JS.
-Така  ще знаем - кое за какво е, и към кого да се обърнем като автор в случай, че имаме въпроси.</li>
-<li>Да подоборим визуално Инфото в играта ( Животи / Ниво / Точки и др. )</li>
-<li>Да разработим GameOver процедура.</li>
-<li>Да подобрим таймингите .. , движение на кораба, движение на враговете и др..</li>
-<li>На ниво 5 да се появи бос и да се започне престрелка с него.</li>
+<li>Write comments wherever it's possible. Use JAVA style.</li>
+<li>To improve the game visual info ( Lives / Level / Score and others )</li>
 </ol>
 </p>

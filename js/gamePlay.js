@@ -5,7 +5,7 @@
  * can be called from "gameCore.js:104,107" on every 20ms
  * depending on the game state.
  *
- * @author Vasil Tsintsev
+ * @author  Vasil Tsintsev
  * @version 0.1
  * @since   2014-07-22
  */
@@ -19,29 +19,29 @@ function Play() {
 	 * @author Asen Nikolov
 	 * @type {Image}
 	 */
-    var background = new Image();
-    background.src = "./images/Background.jpg";
 
+	var background = new Image();
+	background.src = "./images/Background.jpg";
 
+	game.ship = new Ship(game.width / 2, game.borders.bottom);
 
-    // Създаваме нов обект от тип - кораб. Позиционираме го в долната част на екрана.
-    game.ship = new Ship(game.width / 2, game.borders.bottom);
+	/**
+	 *
+	 * нов обект тип враг
+	 *
+	 */
 
-    /* 
-     * нов обект тип враг
-     */
+	game.enemies.push(new Enemy((Math.random() * 100),10,70,10));
+	game.lastEnemyAppear = (new Date()).valueOf();
 
-    game.enemies.push(new Enemy((Math.random() * 100), 10, 70, 10));
-    game.lastEnemyAppear = (new Date()).valueOf();
+	var enemyImg = new Image();
+	enemyImg.src = './images/Enemy2.png';
 
-    var enemyImg = new Image();
-    enemyImg.src = './images/Enemy2.png';
+	var ourShipImg = new Image();
+	ourShipImg.src = './images/Ship2.png';
 
-    var ourShipImg = new Image();
-    ourShipImg.src = './images/Ship2.png';
-	
 	var bossImg = new Image();
-	bossImg.src = './images/Boss.png';
+	bossImg.src = './images/Boss2.png';
 
 	/**
 	 * <h1> Draw method </h1>
@@ -54,220 +54,233 @@ function Play() {
 	 * @param dt This parameter will not be used in future
 	 * @param ctx This parameter is the main Canvas context object.
 	 */
-    this.draw = function(game, dt, ctx) {
+
+	this.draw = function(game, dt, ctx){
+
+		// Clean all
+		ctx.clearRect(0, 0, game.width, game.height);
 
 
-	    // Clean all
-	    ctx.clearRect(0, 0, game.width, game.height);
+		/**
+		 * Game background
+		 */
 
+		ctx.drawImage(background, 0, 0);
+		ctx.fillStyle = '#555555';
 
-	    /*
-	     * Game background
-	     */
+		/*
+		 * Here we Draw all the player's info
+		 */
 
-        ctx.drawImage(background, 0, 0);
-        ctx.fillStyle = '#555555';
+		var textYposition = game.borders.top + 10;
+		ctx.font="14px Arial";
+		ctx.fillStyle = '#ffffff';
+		var info = "Live: " + game.currentLives+" , Health: "+ game.playerShipHealth;
+		ctx.textAlign = "left";
+		ctx.fillText(info, game.borders.left, textYposition);
+		info = "Score: " + game.playerScore + ", Level: " + game.currentLevel;
+		ctx.textAlign = "right";
+		ctx.fillText(info, game.borders.right, textYposition);
 
+		ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
 
-	    /*
-	     * Here we Draw all the player's info
-	     */
+		if(game.boss != null) {
+			if (game.boss.health > 0){
 
-	    var textYposition = game.borders.top + 10;
-	    ctx.font="14px Arial";
-	    ctx.fillStyle = '#ffffff';
-	    var info = "Животи: " + game.currentLives+" , Състояние на кораба / Health: "+ game.playerShipHealth;
-	    ctx.textAlign = "left";
-	    ctx.fillText(info, game.borders.left, textYposition);
-	    info = "Точки: " + game.playerScore + ", Ниво: " + game.currentLevel;
-	    ctx.textAlign = "right";
-	    ctx.fillText(info, game.borders.right, textYposition);
-
-
-        ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
-		
-		if (game.boss != null) {
-			if (game.boss.health > 0)
-			{
 				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), game.boss.y - (game.ship.height / 2), game.boss.width, game.boss.height);
 				var bossHealth = 'Boss Health: ' + game.boss.health;
 				ctx.fillText(bossHealth, ((game.width / 2) - 10), game.borders.top + 30);
 			}
-			if (game.boss.health == 0)
+			if(game.boss.health == 0){
 				game.boss = null;
+			}
 		}
 
-        ctx.fillStyle = '#ff0000';
-        for (var i = 0; i < game.bullets.length; i++) {
-            var bullet = game.bullets[i];
-            ctx.fillRect(bullet.x, bullet.y - 2, 2, 6);
-        }
+		ctx.fillStyle = '#ff0000';
 
-        for (var j = 0; j < game.enemies.length; j++) {
-            var enemy = game.enemies[j];
-            ctx.drawImage(enemyImg,enemy.x,enemy.y,enemy.width,enemy.height);
-        }
+		for(var i = 0; i < game.bullets.length; i++){
+			var bullet = game.bullets[i];
+			ctx.fillRect(bullet.x, bullet.y - 2, 2, 6);
+		}
 
-    };
-
-
-    /*
-     * Този метод променя позицията на кораба и патроните, като се рефрешва на около 50ms.
-     */
-    this.update = function(game, dt) {
-
-        if (game.pressedKeys[37]) { // Натисната е стрелка наляво - местим кораба наляво
-            game.ship.x -= ( game.shipMoveSpeed + (game.currentLevel / 2) );
-        }
-        if (game.pressedKeys[39]) {
-            game.ship.x += ( game.shipMoveSpeed + (game.currentLevel / 2) ); // Натисната е стрелка надясно - местим кораба
-        }
-
-        // Ако сме стигнали края на игралното поле - спираме да местим кораба
-        if(game.ship.x < game.borders.left)game.ship.x=game.borders.left;
-        if(game.ship.x > game.borders.right)game.ship.x=game.borders.right;
-
-        /* Преместваме всеки от изстреляните патрони по вертикала - нагоре. 
-         * Ако е достигната най-горна точка - изтриваме патрона.
-         */
+		for(var j = 0; j < game.enemies.length; j++){
+			var enemy = game.enemies[j];
+			ctx.drawImage(enemyImg,enemy.x,enemy.y,enemy.width,enemy.height);
+		}
+	};
 
 
-        for (i = 0; i < game.bullets.length; i++) {
-            var bullet = game.bullets[i];
-            bullet.y -= game.bulletSpeed;
+	/**
+	 * This method changes the possition of the ship, bullets, enemies.
+	 * It refreshes on every 50ms.
+	 */
 
-            if (bullet.y < 5)
-                game.bullets.splice(i--, 1);
-        }
+	this.update = function(game){
 
-        for (var j = 0; j < game.enemies.length; j++) {
-            var enemy = game.enemies[j];
-            enemy.y += (game.enemiesFallingSpeed + (game.currentLevel ));
+		if(game.pressedKeys[37]){ // Left arrow - moves the ship to the left
+			game.ship.x -= ( game.shipMoveSpeed + (game.currentLevel / 2) );
+		}
+
+		if(game.pressedKeys[39]){ // Right arrow - moves the ship to the right
+			game.ship.x += ( game.shipMoveSpeed + (game.currentLevel / 2) );
+		}
+
+		if(game.ship.x < game.borders.left)game.ship.x=game.borders.left;
+		if(game.ship.x > game.borders.right)game.ship.x=game.borders.right;
 
 
-	        /**
-	         * Ships health is decreasing on ship/enemy collisions
-	         */
+		for (i = 0; i < game.bullets.length; i++) {
+			var bullet = game.bullets[i];
+			bullet.y -= game.bulletSpeed;
 
-	        if(
-		        (enemy.x + enemy.width) > (game.ship.x - game.ship.width/2) &&
-		        (enemy.x) < (game.ship.x + game.ship.width/2.3) &&
-			    (enemy.y + (enemy.height + 7)) >= game.ship.y ) {
-		        game.playerShipHealth--;
-		        game.enemies.splice(j--,1);
+			if(bullet.y < 5){
+				game.bullets.splice(i--, 1);
+			}
+		}
+
+		for(var j = 0; j < game.enemies.length; j++) {
+			var enemy = game.enemies[j];
+			enemy.y += (game.enemiesFallingSpeed + (game.currentLevel ));
+
+
+			/**
+			 * Ships health is decreasing on ship/enemy collisions
+			 */
+
+			if(
+				(enemy.x + enemy.width) > (game.ship.x - game.ship.width/2) &&
+				(enemy.x) < (game.ship.x + game.ship.width/2.3) &&
+				(enemy.y + (enemy.height + 7)) >= game.ship.y ){
+					game.playerShipHealth--;
+					game.enemies.splice(j--,1);
 
 	        }else{
 
-		        /**
-		         * Remove the enemy's ship if reach the bottom's border of the game.
-		         */
+				/**
+				 * Remove the enemy's ship if reach the bottom's border of the game frame.
+				 */
 
-		        if (enemy.y >= game.borders.bottom) {
-			        game.enemies.splice(j--, 1);
+				if(enemy.y >= game.borders.bottom) {
+					game.enemies.splice(j--, 1);
 					game.playerShipHealth--; //If the player haven't destroyed the enemy on time, his health is decreasing
-		        }
+				}
+			}
 
-	        }
+			/**
+			 * This feature destroys the enemy
+			 */
+
+			var boom = false;
+
+			for(var i=0; i<game.bullets.length; i++){
+				var bullet = game.bullets[i];
+
+				if((bullet.x >= enemy.x) && (bullet.x <= (enemy.x + enemy.width) ) && (bullet.y <= (enemy.y + (enemy.height - 20) )) ){
+
+					game.bullets.splice(i--,1);
+					boom = true;
+					game.playerScore++;
+					break;
+				}
+			}
+			if(boom == true)game.enemies.splice(j--,1);
+		}
 
 
-	        /**
-	         * This feature destroys the enemy
-	         */
+		if (game.boss != null) {
 
-	        var boom = false;
+			for(var i=0; i<game.bullets.length; i++){
 
-	        for(var i=0; i<game.bullets.length; i++){
-		        var bullet = game.bullets[i];
+				var bullet = game.bullets[i];
 
-		        if((bullet.x >= enemy.x) && (bullet.x <= (enemy.x + enemy.width) ) && (bullet.y <= (enemy.y + (enemy.height - 20) )) ){
+				if(
+					(bullet.x >= (game.boss.x - (game.boss.width / 2))) &&
+					(bullet.x <= (game.boss.x + (game.boss.width / 2)) ) &&
+					(bullet.y <= (game.boss.y + (game.boss.height - 10) )) ){
 
-			        game.bullets.splice(i--,1);
-			        boom = true;
-			        game.playerScore++;
-			        break;
-		        }
-
-				if (game.boss != null) {
-					if ((bullet.x >= game.boss.x) && ((bullet.x <= (game.boss.x + game.boss.width / 2) ) || (bullet.x <= (game.boss.x - game.boss.width) )) && (bullet.y <= (game.boss.y + (game.boss.height - 20) )) ) {
 						game.bullets.splice(i--,1);
 						game.boss.health--;
-					}
+						game.playerScore++;
+						break;
 				}
-	        }
-	        if(boom == true)game.enemies.splice(j--,1);
-        }
+			}
+
+			if (game.boss.health < 1){
+				setState(new GameOver());
+			}
+		}
+
+		if (game.playerScore > game.riseLevelOnScore) {
+			game.playerScore=0;
+			game.currentLevel++;
+		}
 
 
-
-        if (((new Date()).valueOf() - game.lastEnemyAppear) > 2000) {
-            this.newEnemy();
-        }
-
-
-        if (game.playerScore > game.riseLevelOnScore) {
-	        game.playerScore=0;
-	        game.currentLevel++;
-        }
-		
 		if (game.playerShipHealth < 0) {
-	        game.playerShipHealth = 20;
-	        game.currentLives--;
-        }
+			game.playerShipHealth = game.defaultShipHealth;
+			game.currentLives--;
+		}
 
-        if (game.currentLevel % 5 === 0) {
-            this.boss();
-        }
+		if (game.currentLevel > 2) {
 
-        if (game.currentLives < 0) {
-            //alert('Game over!\n Your score:' + game.playerScore);
-        }
+			this.boss();
+
+		}else{
+
+			if (((new Date()).valueOf() - game.lastEnemyAppear) > 2000){
+				this.newEnemy();
+			}
+		}
+
+		if (game.currentLives < 1){
+			setState(new GameOver());
+		}
 
 
-        for(var i=0; i<game.enemies.length; i++) {
-		   // var enemy = game.enemies[i];
-
-	    }
-
-    };
+	};
 
 
-    /*
-     * Този метод слухти за натиснат "Space", ако го улови - изстрелва патрон.
-     */
-    this.keyDown = function(game, keyCode) {
-        if (keyCode == 32)
-            this.fireRocket();
-    };
+	/**
+	 * This method shoots bullets on pressed SpaceBar button
+	 */
 
-    /*
-     * С този метод се симулира изстрелването на патрон. Като първо се проверява дали в рамките
-     * на последните 200ms не е изстрелят вече един, ако не е - се създава нов обект - патрон
-     * и се ъпдейтва таймера.
-     */
-    this.fireRocket = function() {
-        if (game.lastShootTime === null || ((new Date()).valueOf() - game.lastShootTime) > 200) {
-            game.bullets.push(new Bullet(game.ship.x, game.ship.y - 12, 150));
-            game.lastShootTime = (new Date()).valueOf();
-        }
-    };
+	this.keyDown = function(game, keyCode){
+		if (keyCode == 32){
+			this.fireRocket();
+		}
+	};
 
-    /* с този метод се извиква и създава нова ГАД!
-     */
-    this.newEnemy = function() {
-        var newX = Math.random() * 750;
-        game.enemies.push(new Enemy(newX, 20, (game.currentLevel * 50), (game.currentLevel * 10)));
-        game.lastEnemyAppear = (new Date()).valueOf();
 
-    };
-	
-	this.boss = function() {
-		if (game.boss == null) {
+	/**
+	 * This method simulates shooting and shoots on all 200ms.
+	 */
+
+	this.fireRocket = function(){
+		if (game.lastShootTime === null || ((new Date()).valueOf() - game.lastShootTime) > 200) {
+			game.bullets.push(new Bullet(game.ship.x, game.ship.y - 12, 150));
+			game.lastShootTime = (new Date()).valueOf();
+		}
+	};
+
+
+	/**
+	 * с този метод се извиква и създава нова ГАД!
+	 */
+	this.newEnemy = function(){
+		var newX = Math.random() * 750;
+		game.enemies.push(new Enemy(newX, 20, (game.currentLevel * 50), (game.currentLevel * 10)));
+		game.lastEnemyAppear = (new Date()).valueOf();
+	};
+
+	this.boss = function(){
+
+		if(game.boss == null){
 			game.boss = new Boss(game.width / 2, 20, (new Date()).valueOf());
 		}
-		
-		if (game.boss.y < (game.height / 3)) {
+
+		if(game.boss.y < (game.height / 3)){
 			game.boss.y++;
-		} else {
+		}else{
 			var movement = (Math.random() * 100) + 1;
 			if (movement < 50) {
 				if (game.boss.x < game.borders.left + game.boss.width)
@@ -296,43 +309,42 @@ function Play() {
 	};
 }
 
-/*
+/**
  * Функция за дефиниране на кораба
  * Очаква параметри "x" и "y", който определят началната позиция
  * на кораба, също има и допълнителни настройки за размери.
  */
 function Ship(x, y) {
-    this.x = x;
-    this.y = y;
-    this.width = 45;
-    this.height = 43;
+	this.x = x;
+	this.y = y;
+	this.width = 45;
+	this.height = 43;
 }
 
-/*
+/**
  * Функция за създаване на патрони
  * Това са патроните, които се изстрелват от кораба, имат позиция
  * както и скорост на движение
  */
 function Bullet(x, y, velocity) {
-    this.x = x;
-    this.y = y;
-    this.velocity = velocity;
+	this.x = x;
+	this.y = y;
+	this.velocity = velocity;
 }
 
 function Enemy(x, y, velocity, score) {
-    this.x = x;
-    this.y = y;
-    this.velocity = velocity;
+	this.x = x;
+	this.y = y;
+	this.velocity = velocity;
 	this.width = 29;
 	this.height = 36;
-    this.score = score; // different enemy will bring different score
 }
 function Boss(x, y, score, lastMovement) {
-    this.x = x;
-    this.y = y;
-	this.width = 84;
-	this.height = 118;
-    this.score = score;
+	this.x = x;
+	this.y = y;
+	this.width = 70;
+	this.height = 113;
+	this.score = score;
 	this.lastMovement = lastMovement;
 	this.health = 30;
 }

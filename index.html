@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <title>Team Dobrovolski - game</title>
-<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/main.css" />
 </head>
 <body>
 
-	<!-- Основният контайнер за играта -->
+
+
+	<!-- Main game container -->
 	
 	<div id="container">
 		<canvas id="mainCanvas"></canvas>
@@ -15,20 +17,21 @@
 
 	
 	
-	<!-- Блокче с инструкций за играта -->
+	<!-- Block with game instructions -->
 	
 	<div id="instructions">
-		<p>Със стрелките наляво / надясно управлявате кораба, със spacebar - стреляте.</p>
+		<p>Left / Right arrows moves the ship, SpaceBar - shooting</p>
 	</div>
 	
-	
-	<!-- Тук извикваме/зареждаме javascript-овете на играта. -->
+
+
+	<!-- JavaScript includes goes here -->
 	
 	<script src="js/gameCore.js"></script>
 	<script src="js/gameWelcome.js"></script>
+	<script src="js/gameOver.js"></script>
 	<script src="js/gamePlay.js"></script>
 	<script src="js/init.js"></script>
-
 
 </body>
 </html>

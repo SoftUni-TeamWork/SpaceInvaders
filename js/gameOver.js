@@ -1,22 +1,22 @@
 /**
  *
- * <h1>Welcome procedure</h1>
- * New method which shows the welcome texts and waits for
- * user interaction to change the state and run the game.
+ * <h1>GameOver procedure</h1>
+ * Procedure which shows the GameOver screen and waits for
+ * user interaction to change the state and run again the game.
  *
  * @author  Vasil Tsintsev
  * @version 0.1
- * @since   2014-07-23
+ * @since   2014-07-26
  *
  */
 
-function Welcome(){
+function GameOver(){
 
 
 	/**
 	 *
 	 * <h1> Draw method </h1>
-	 * This method draws the welcome texts and items on the screen.
+	 * This method draws the GameOver texts and items on the screen.
 	 *
 	 * @author Vasil Tsintsev
 	 * @return undefined  Doesn't return anything.
@@ -27,14 +27,18 @@ function Welcome(){
 	 */
 
 	this.draw=function(game,time,ctx){
+
 		ctx.clearRect(0, 0, game.width, game.height);
 		ctx.font="28px Arial";
-		ctx.fillStyle="#ffffff";
+		ctx.fillStyle="#FFFFFF";
 		ctx.textBaseline="center";
 		ctx.textAlign="center";
-		ctx.fillText("Team Dobrovolski game",game.width / 2,game.height/2 - 40);
+		ctx.fillText("Game Over",game.width / 2,game.height/2 - 70);
+		ctx.font="23px Arial";
+		ctx.fillText("Your score is: "+game.playerScore,game.width / 2,game.height/2 - 40);
 		ctx.font="16px Arial";
-		ctx.fillText("Натиснете 'Space' за да играете.", game.width / 2, game.height/2);
+		ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2);
+
 	};
 
 
@@ -43,7 +47,7 @@ function Welcome(){
 	 *
 	 * <h1>KeyDown method</h1>
 	 * This method is listening for KeyDown event changes the
-	 * game state.
+	 * game state. After press - runs again the game
 	 *
 	 * @author Vasil Tsintsev
 	 * @return undefined  Doesn't return anything.
@@ -54,6 +58,12 @@ function Welcome(){
 
 	this.keyDown=function(game,keyCode){
 		if(keyCode == 32){
+
+			game.playerScore=0;
+			game.currentLevel=1;
+			game.currentLives=3;
+			game.playerShipHealth=game.defaultShipHealth;
+
 			setState(new Play());
 		}
 	};

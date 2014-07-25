@@ -1,29 +1,37 @@
-// Създаваме нова обект "GameCore" с необходимите параметри.
+/**
+ * <h1>Object GameCore</h1>
+ * GameCore object holds the core of the game.
+ *
+ * @author  Vasil Tsintsev
+ * @version 0.1
+ * @since   2014-07-22
+ */
 
 function GameCore(){
 
-	// конфигурационни параметри.
-	
+
 	this.width=800;
 	this.height=600;
 	this.borders={left:10,top:10,right:790,bottom:590};
 	this.intervalId=0;
 	this.lastShootTime=null;
-	
+
+	this.defaultShipHealth=3;
+
 	this.playerScore=0;
-	this.playerShipHealth=20;
+	this.playerShipHealth=this.defaultShipHealth;
 	this.currentLevel=1;
 	this.currentLives=3;
 	this.riseLevelOnScore=10;
 
 	this.ship=null;
 	this.boss = null;
-	this.shipMoveSpeed=10;
+	this.shipMoveSpeed=5;
 	this.bullets = [];
-	this.bulletSpeed=15;
+	this.bulletSpeed=10;
 	this.stateStack = [];
 	this.enemies = [];
-	this.enemiesFallingSpeed=1;
+	this.enemiesFallingSpeed=0.5;
     this.lastEnemyAppear=null;
 	
 	this.pressedKeys = {};
@@ -87,7 +95,7 @@ function startGame(){
 	this.intervalId=setInterval(
 		function(){
 			MainLoop(game);
-		},40);
+		},20);
 }
 
 /*
