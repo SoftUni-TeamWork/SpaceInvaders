@@ -1,18 +1,28 @@
-// текущи стойности на играта
-var currentScore = 0;
-var currentLevel = 1;
-var currentLives = 3;
-
-/*
- * Тук създаваме обект Play
+/**
+ * <h1>Object Play</h1>
+ * This objects holds the most of the game-play functionality.
+ * It is initialized once, but it's methods ( Draw and Update )
+ * can be called from "gameCore.js:104,107" on every 20ms
+ * depending on the game state.
+ *
+ * @author Vasil Tsintsev
+ * @version 0.1
+ * @since   2014-07-22
  */
 
 function Play() {
 
-    //бекграунд на играта
+	/**
+	 * <h1>Game Background Image</h1>
+	 * We attach the game background image here.
+	 *
+	 * @author Asen Nikolov
+	 * @type {Image}
+	 */
     var background = new Image();
-    background.onload = function() {};
-    background.src = "./images/Background.png";
+    background.src = "./images/Background.jpg";
+
+
 
     // Създаваме нов обект от тип - кораб. Позиционираме го в долната част на екрана.
     game.ship = new Ship(game.width / 2, game.borders.bottom);
@@ -24,23 +34,53 @@ function Play() {
     game.enemies.push(new Enemy((Math.random() * 100), 10, 70, 10));
     game.lastEnemyAppear = (new Date()).valueOf();
 
-    var enemyImg = new Image(33, 42);
-    enemyImg.onload = function() {};
-    enemyImg.src = './images/Enemy1.png';
+    var enemyImg = new Image();
+    enemyImg.src = './images/Enemy2.png';
 
-    var ourShipImg = new Image(45, 43);
-    ourShipImg.onload = function() {};
-    ourShipImg.src = './images/Ship.png';
+    var ourShipImg = new Image();
+    ourShipImg.src = './images/Ship2.png';
 
-    /*
-     * Този метод изчиства игралното поле, оцветява кораба и патроните.
-     */
+	/**
+	 * <h1> Draw method </h1>
+	 * Depending on the game state - this method is used to
+	 * draw almost all objects on the scene.
+	 *
+	 * @author Vasil Tsintsev
+	 * @return undefined  Doesn't return anything.
+	 * @param game Requires tha main game Object instance
+	 * @param dt This parameter will not be used in future
+	 * @param ctx This parameter is the main Canvas context object.
+	 */
     this.draw = function(game, dt, ctx) {
 
-        ctx.clearRect(0, 0, game.width, game.height);
+
+	    // Clean all
+	    ctx.clearRect(0, 0, game.width, game.height);
+
+
+	    /*
+	     * Game background
+	     */
+
         ctx.drawImage(background, 0, 0);
         ctx.fillStyle = '#555555';
-        //        ctx.fillRect(game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
+
+
+	    /*
+	     * Here we Draw all the player's info
+	     */
+
+	    var textYposition = game.borders.top + 10;
+	    ctx.font="14px Arial";
+	    ctx.fillStyle = '#ffffff';
+	    var info = "Животи: " + game.currentLives+" , Състояние на кораба / Health: "+ game.playerShipHealth;
+	    ctx.textAlign = "left";
+	    ctx.fillText(info, game.borders.left, textYposition);
+	    info = "Точки: " + game.playerScore + ", Ниво: " + game.currentLevel;
+	    ctx.textAlign = "right";
+	    ctx.fillText(info, game.borders.right, textYposition);
+
+
         ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
         ctx.fillStyle = '#ff0000';
         for (var i = 0; i < game.bullets.length; i++) {
@@ -50,8 +90,7 @@ function Play() {
 
         for (var j = 0; j < game.enemies.length; j++) {
             var enemy = game.enemies[j];
-            ctx.drawImage(enemyImg, enemy.x, enemy.y);
-            enemyImg.onload();
+            ctx.drawImage(enemyImg,enemy.x,enemy.y,enemy.width,enemy.height);
         }
 
     };
@@ -63,19 +102,15 @@ function Play() {
     this.update = function(game, dt) {
 
         if (game.pressedKeys[37]) { // Натисната е стрелка наляво - местим кораба наляво
-            game.ship.x -= 200 * dt;
+            game.ship.x -= ( game.shipMoveSpeed + (game.currentLevel / 2) );
         }
         if (game.pressedKeys[39]) {
-            game.ship.x += 200 * dt; // Натисната е стрелка надясно - местим кораба
+            game.ship.x += ( game.shipMoveSpeed + (game.currentLevel / 2) ); // Натисната е стрелка надясно - местим кораба
         }
 
         // Ако сме стигнали края на игралното поле - спираме да местим кораба
-        if (game.ship.x < game.borders.left) {
-            game.ship.x = game.borders.left;
-        }
-        if (game.ship.x > game.borders.right) {
-            game.ship.x = game.borders.right;
-        }
+        if(game.ship.x < game.borders.left)game.ship.x=game.borders.left;
+        if(game.ship.x > game.borders.right)game.ship.x=game.borders.right;
 
         /* Преместваме всеки от изстреляните патрони по вертикала - нагоре. 
          * Ако е достигната най-горна точка - изтриваме патрона.
@@ -84,7 +119,7 @@ function Play() {
 
         for (i = 0; i < game.bullets.length; i++) {
             var bullet = game.bullets[i];
-            bullet.y -= dt * bullet.velocity;
+            bullet.y -= game.bulletSpeed;
 
             if (bullet.y < 5)
                 game.bullets.splice(i--, 1);
@@ -92,41 +127,81 @@ function Play() {
 
         for (var j = 0; j < game.enemies.length; j++) {
             var enemy = game.enemies[j];
-            enemy.y += Math.round(dt * enemy.velocity);
-            if (enemy.y >= game.borders.bottom) {
-                game.enemies.splice(j--, 1);
-            }
+            enemy.y += (game.enemiesFallingSpeed + (game.currentLevel ));
+
+
+	        /**
+	         * Ships health is decreasing on ship/enemy collisions
+	         */
+
+	        if(
+		        (enemy.x + enemy.width) > (game.ship.x - game.ship.width/2) &&
+		        (enemy.x) < (game.ship.x + game.ship.width/2.3) &&
+			    (enemy.y + (enemy.height + 7)) >= game.ship.y ) {
+		        game.playerShipHealth--;
+		        game.enemies.splice(j--,1);
+
+	        }else{
+
+		        /**
+		         * Remove the enemy's ship if reach the bottom's border of the game.
+		         */
+
+		        if (enemy.y >= game.borders.bottom) {
+			        game.enemies.splice(j--, 1);
+		        }
+
+	        }
+
+
+	        /**
+	         * This feature destroys the enemy
+	         */
+
+	        var boom = false;
+
+	        for(var i=0; i<game.bullets.length; i++){
+		        var bullet = game.bullets[i];
+
+		        if((bullet.x >= enemy.x) && (bullet.x <= (enemy.x + enemy.width) ) && (bullet.y <= (enemy.y + (enemy.height - 20) )) ){
+
+			        game.bullets.splice(i--,1);
+			        boom = true;
+			        game.playerScore++;
+			        break;
+		        }
+	        }
+	        if(boom == true)game.enemies.splice(j--,1);
+
+
         }
+
+
 
         if (((new Date()).valueOf() - game.lastEnemyAppear) > 2000) {
             this.newEnemy();
         }
 
-        if (currentScore > currentLevel * 100) {
-            currentLevel++;
+
+        if (game.playerScore > game.riseLevelOnScore) {
+	        game.playerScore=0;
+	        game.currentLevel++;
         }
 
-        if (currentLevel == 5) {
+        if (game.currentLevel > 4) {
             //Call the boss
         }
 
-        if (currentLives == 0) {
+        if (game.currentLives < 1) {
             //End game
         }
 
-        /**
-         * This feature destroys the enemy
-         */
-        for (var bulletIndex = 0; bulletIndex < game.bullets.length; bulletIndex++) {
-            for (var enemyIndex = 0; enemyIndex < game.enemies.length; enemyIndex++) {
-                bullet = game.bullets[bulletIndex];
-                enemy = game.enemies[enemyIndex];
-                if (bullet.y <= enemy.y + 30 && (bullet.x >= enemy.x && bullet.x <= enemy.x + 40)) {
-                    game.enemies.splice(enemyIndex, 1);
-                    game.bullets.splice(enemyIndex, 1);
-                }
-            }
-        }
+
+        for(var i=0; i<game.enemies.length; i++) {
+		   // var enemy = game.enemies[i];
+
+	    }
+
     };
 
 
@@ -154,7 +229,7 @@ function Play() {
      */
     this.newEnemy = function() {
         var newX = Math.random() * 750;
-        game.enemies.push(new Enemy(newX, 20, (currentLevel * 50), (currentLevel * 10)));
+        game.enemies.push(new Enemy(newX, 20, (game.currentLevel * 50), (game.currentLevel * 10)));
         game.lastEnemyAppear = (new Date()).valueOf();
 
     };
@@ -187,6 +262,8 @@ function Enemy(x, y, velocity, score) {
     this.x = x;
     this.y = y;
     this.velocity = velocity;
+	this.width = 29;
+	this.height = 36;
     this.score = score; // different enemy will bring different score
     this.isHitted = false;
 }

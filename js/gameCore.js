@@ -10,10 +10,19 @@ function GameCore(){
 	this.intervalId=0;
 	this.lastShootTime=null;
 	
+	this.playerScore=0;
+	this.playerShipHealth=50;
+	this.currentLevel=1;
+	this.currentLives=3;
+	this.riseLevelOnScore=10;
+
 	this.ship=null;
+	this.shipMoveSpeed=6;
 	this.bullets = [];
+	this.bulletSpeed=10;
 	this.stateStack = [];
 	this.enemies = [];
+	this.enemiesFallingSpeed=2;
     this.lastEnemyAppear=null;
 	
 	this.pressedKeys = {};
@@ -77,7 +86,7 @@ function startGame(){
 	this.intervalId=setInterval(
 		function(){
 			MainLoop(game);
-		},20);
+		},25);
 }
 
 /*
