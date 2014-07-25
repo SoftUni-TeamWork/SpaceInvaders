@@ -39,6 +39,9 @@ function Play() {
 
     var ourShipImg = new Image();
     ourShipImg.src = './images/Ship2.png';
+	
+	var bossImg = new Image();
+	bossImg.src = './images/Boss.png';
 
 	/**
 	 * <h1> Draw method </h1>
@@ -82,6 +85,16 @@ function Play() {
 
 
         ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
+		
+		if (game.boss != null) {
+			if (game.boss.helth > 0)
+			{
+				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), game.boss.y - (game.ship.height / 2), game.boss.width, game.boss.height);
+				var bossHelth = 'Boss Helth: ' + game.boss.helth;
+				ctx.fillText(bossHelth, game.width / 2, game.borders.top + 30);
+			}
+		}
+
         ctx.fillStyle = '#ff0000';
         for (var i = 0; i < game.bullets.length; i++) {
             var bullet = game.bullets[i];
@@ -171,10 +184,15 @@ function Play() {
 			        game.playerScore++;
 			        break;
 		        }
+
+				if (game.boss != null) {
+					if ((bullet.x >= game.boss.x) && (bullet.x <= (game.boss.x + game.boss.width) ) && (bullet.y <= (game.boss.y + (game.boss.height - 20) )) ) {
+						game.bullets.splice(i--,1);
+						game.boss.helth--;
+					}
+				}
 	        }
 	        if(boom == true)game.enemies.splice(j--,1);
-
-
         }
 
 
@@ -194,8 +212,8 @@ function Play() {
 	        game.currentLives--;
         }
 
-        if (game.currentLevel > 4) {
-            //Call the boss
+        if (game.currentLevel == 5 || game.currentLevel == 10) {
+            this.boss();
         }
 
         if (game.currentLives < 0) {
@@ -239,6 +257,41 @@ function Play() {
         game.lastEnemyAppear = (new Date()).valueOf();
 
     };
+	
+	this.boss = function() {
+		if (game.boss == null) {
+			game.boss = new Boss(game.width / 2, 20, (new Date()).valueOf());
+		}
+		
+		if (game.boss.y < (game.height / 3)) {
+			game.boss.y++;
+		} else {
+			var movement = (Math.random() * 100) + 1;
+			if (movement < 50) {
+				if (game.boss.x < game.borders.left + game.boss.width)
+					game.boss.x = game.borders.left + game.boss.width;
+				else {
+					if (game.boss.lastMovement == null || (new Date()).valueOf() - game.boss.lastMovement > 400) {
+						for(var k = 1; k <= 20; k++) {
+							game.boss.x = game.boss.x + 0.5;
+						}
+						game.boss.lastMovement = (new Date()).valueOf();
+					}
+				}
+			} else {
+				if (game.boss.x > game.borders.right + game.boss.width)
+					game.boss.x = game.borders.right - game.boss.width;
+				else {
+					if (game.boss.lastMovement == null || (new Date()).valueOf() - game.boss.lastMovement > 400) {
+						for(var j = 1; j <= 20; j++) {
+							game.boss.x = game.boss.x - 0.5;
+						}
+						game.boss.lastMovement = (new Date()).valueOf();
+					}
+				}
+			}
+		}
+	};
 }
 
 /*
@@ -271,4 +324,13 @@ function Enemy(x, y, velocity, score) {
 	this.width = 29;
 	this.height = 36;
     this.score = score; // different enemy will bring different score
+}
+function Boss(x, y, score, lastMovement) {
+    this.x = x;
+    this.y = y;
+	this.width = 84;
+	this.height = 118;
+    this.score = score;
+	this.lastMovement = lastMovement;
+	this.helth = 10;
 }

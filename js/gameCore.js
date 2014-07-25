@@ -12,11 +12,12 @@ function GameCore(){
 	
 	this.playerScore=0;
 	this.playerShipHealth=50;
-	this.currentLevel=1;
+	this.currentLevel=4;
 	this.currentLives=3;
 	this.riseLevelOnScore=10;
 
 	this.ship=null;
+	this.boss = null;
 	this.shipMoveSpeed=4;
 	this.bullets = [];
 	this.bulletSpeed=10;
