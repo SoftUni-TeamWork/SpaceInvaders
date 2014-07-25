@@ -188,13 +188,18 @@ function Play() {
 	        game.playerScore=0;
 	        game.currentLevel++;
         }
+		
+		if (game.playerShipHealth < 0) {
+	        game.playerShipHealth = 50;
+	        game.currentLives--;
+        }
 
         if (game.currentLevel > 4) {
             //Call the boss
         }
 
-        if (game.currentLives < 1) {
-            //End game
+        if (game.currentLives < 0) {
+            //alert('Game over!\n Your score:' + game.playerScore);
         }
 
 
