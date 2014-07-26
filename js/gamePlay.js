@@ -35,13 +35,13 @@ function Play() {
 	game.lastEnemyAppear = (new Date()).valueOf();
 
 	var enemyImg = new Image();
-	enemyImg.src = './images/Enemy2.png';
+	enemyImg.src = './images/Enemy.png';
 
 	var ourShipImg = new Image();
-	ourShipImg.src = './images/Ship2.png';
+	ourShipImg.src = './images/Ship.png';
 
 	var bossImg = new Image();
-	bossImg.src = './images/Boss2.png';
+	bossImg.src = './images/Boss.png';
 	
 	var fullHealthImg = new Image();
 	fullHealthImg.src = './images/FullHealth.png';
