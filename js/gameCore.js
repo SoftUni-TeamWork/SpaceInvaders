@@ -16,7 +16,7 @@ function GameCore(){
 	this.intervalId=0;
 	this.lastShootTime=null;
 
-	this.defaultShipHealth=30;
+	this.defaultShipHealth=20;
 
 	this.playerScore=0;
 	this.playerShipHealth=this.defaultShipHealth;
@@ -31,7 +31,7 @@ function GameCore(){
 	this.bulletSpeed=10;
 	this.stateStack = [];
 	this.enemies = [];
-	this.enemiesFallingSpeed=0.5;
+	this.enemiesFallingSpeed=1;
     this.lastEnemyAppear=null;
 	
 	this.pressedKeys = {};

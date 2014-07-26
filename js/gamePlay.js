@@ -42,6 +42,12 @@ function Play() {
 
 	var bossImg = new Image();
 	bossImg.src = './images/Boss2.png';
+	
+	var fullHealthImg = new Image();
+	fullHealthImg.src = './images/FullHealth.png';
+	
+	var emptyHealthImg = new Image();
+	emptyHealthImg.src = './images/EmptyHealth.png';
 
 	/**
 	 * <h1> Draw method </h1>
@@ -67,6 +73,29 @@ function Play() {
 
 		ctx.drawImage(background, 0, 0);
 		ctx.fillStyle = '#555555';
+		
+		/*
+		 * Here we show the rest of the lives with images
+		 */
+		function getLives(){
+			if(game.currentLives == 3){
+				for(var i = 0; i < 3; i+=1){
+					ctx.drawImage(fullHealthImg,50 + i*fullHealthImg.width,10,fullHealthImg.width,fullHealthImg.height);
+				}
+			}
+			else if(game.currentLives == 2){
+				for(var i = 0; i < 2; i+=1){
+					ctx.drawImage(fullHealthImg,50 + i*fullHealthImg.width,10,fullHealthImg.width,fullHealthImg.height);
+				}
+				ctx.drawImage(emptyHealthImg,50 + 2*emptyHealthImg.width,10,emptyHealthImg.width,emptyHealthImg.height);
+			}
+			else if(game.currentLives == 1){
+				ctx.drawImage(fullHealthImg,50,10,fullHealthImg.width,fullHealthImg.height);
+				for(var i = 1; i < 3; i+=1){
+					ctx.drawImage(emptyHealthImg,50 + i*emptyHealthImg.width,10,emptyHealthImg.width,emptyHealthImg.height);
+				}
+			}
+		};
 
 		/*
 		 * Here we Draw all the player's info
@@ -75,7 +104,9 @@ function Play() {
 		var textYposition = game.borders.top + 10;
 		ctx.font="14px Arial";
 		ctx.fillStyle = '#ffffff';
-		var info = "Lives: " + game.currentLives+" , Health: "+ game.playerShipHealth;
+		var info = "Lives:          ";
+		getLives();
+		info += " , Health: "+ game.playerShipHealth;
 		ctx.textAlign = "left";
 		ctx.fillText(info, game.borders.left, textYposition);
 		info = "Score: " + game.playerScore + ", Level: " + game.currentLevel;
