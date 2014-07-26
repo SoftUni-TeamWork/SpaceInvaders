@@ -48,6 +48,9 @@ function Play() {
 	
 	var emptyHealthImg = new Image();
 	emptyHealthImg.src = './images/EmptyHealth.png';
+	
+	var bossHealthImg = new Image();
+	bossHealthImg.src = './images/BossHealth.png';
 
 	/**
 	 * <h1> Draw method </h1>
@@ -96,6 +99,15 @@ function Play() {
 				}
 			}
 		};
+		
+		/*
+		 * Here we show the rest of the lives of the boss
+		 */
+		function showBossLives(){
+			for(var i = 0; i < game.boss.health; i+=1){
+				ctx.drawImage(bossHealthImg,200 + i*bossHealthImg.width,50,bossHealthImg.width,bossHealthImg.height);
+			}
+		};
 
 		/*
 		 * Here we Draw all the player's info
@@ -117,9 +129,9 @@ function Play() {
 
 		if(game.boss != null) {
 			if (game.boss.health > 0){
-
 				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), game.boss.y - (game.ship.height / 2), game.boss.width, game.boss.height);
-				var bossHealth = 'Boss Health: ' + game.boss.health;
+				var bossHealth = 'Boss Health: ';
+				showBossLives();
 				ctx.fillText(bossHealth, ((game.width / 2) - 10), game.borders.top + 30);
 			}
 			if(game.boss.health == 0){
