@@ -172,7 +172,7 @@ function Play() {
 		if(game.ship.x > game.borders.right)game.ship.x=game.borders.right;
 
 
-		for (i = 0; i < game.bullets.length; i++) {
+		for (i = 0; i < game.bullets.length; i++){
 			var bullet = game.bullets[i];
 			bullet.y -= game.bulletSpeed;
 
@@ -248,9 +248,6 @@ function Play() {
 				}
 			}
 
-			if (game.boss.health < 1){
-				setState(new GameOver());
-			}
 		}
 
 		if (game.playerScore > game.riseLevelOnScore) {
@@ -279,7 +276,12 @@ function Play() {
 			setState(new GameOver());
 		}
 
-
+		if (game.boss != null) {
+			if (game.boss.health < 1){
+				game.boss = null;
+				setState(new GameOver());
+			}
+		}
 	};
 
 

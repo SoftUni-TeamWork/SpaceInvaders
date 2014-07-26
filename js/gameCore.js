@@ -24,15 +24,15 @@ function GameCore(){
 	this.currentLives=3;
 	this.riseLevelOnScore=20;
 
-	this.ship=null;
+	this.ship = null;
 	this.boss = null;
-	this.shipMoveSpeed=5;
+	this.shipMoveSpeed = 5;
 	this.bullets = [];
-	this.bulletSpeed=10;
+	this.bulletSpeed = 10;
 	this.stateStack = [];
 	this.enemies = [];
-	this.enemiesFallingSpeed=1;
-    this.lastEnemyAppear=null;
+	this.enemiesFallingSpeed = 1;
+    this.lastEnemyAppear = null;
 	
 	this.pressedKeys = {};
 	this.gameCanvas =  null;
