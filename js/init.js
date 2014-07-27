@@ -1,13 +1,14 @@
 /**
- *
  * We create new global variable "game" as instance of class: "GameCore".
- *
  */
-
 var game = new GameCore();
 
-// Game initialization
+/**
+ * We initialize a new game
+ */
 initGame();
 
-// Running the game
+/**
+ * Running the game
+ */
 startGame();

@@ -1,8 +1,8 @@
 @charset "utf-8";
 
 /* 
- * Резетваме основните показатели на елементите от страницата, 
- * както и задаваме основните стилове.
+ * We reset the browser default values, 
+ * and we add the main styles.
  */
  
 body{
@@ -24,7 +24,7 @@ img{
 }
 
 /* 
- * Стилизираме характерните за играта блокчета и елементи.
+ * Here we style the main blocks and attributes of the game
  */
 
 #container{
@@ -38,11 +38,13 @@ img{
 	width:800px;
 	height:600px;
 }
+
 #instructions{
 	width:800px;
 	margin:10px auto;
 	text-align:center;
 }
+
 #instructions p{
 	font-size:1em;
 }

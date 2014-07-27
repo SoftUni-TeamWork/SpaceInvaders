@@ -6,24 +6,30 @@
  * @version 0.1
  * @since   2014-07-22
  */
-
+ 
 function GameCore(){
+	/**
+	 * Canvas settings
+	 */
+	this.width = 800;
+	this.height = 600;
+	this.borders = {left:10, top:10, right:790, bottom:590};
+	this.intervalId = 0;
+	this.lastShootTime = null;
 
+	/**
+	 * Player values
+	 */
+	this.defaultShipHealth = 20;
+	this.playerScore = 0;
+	this.playerShipHealth = this.defaultShipHealth;
+	this.currentLevel = 1;
+	this.currentLives = 3;
+	this.riseLevelOnScore = 20;
 
-	this.width=800;
-	this.height=600;
-	this.borders={left:10,top:10,right:790,bottom:590};
-	this.intervalId=0;
-	this.lastShootTime=null;
-
-	this.defaultShipHealth=20;
-
-	this.playerScore=0;
-	this.playerShipHealth=this.defaultShipHealth;
-	this.currentLevel=1;
-	this.currentLives=3;
-	this.riseLevelOnScore=20;
-
+	/**
+	 * Game values
+	 */
 	this.ship = null;
 	this.boss = null;
 	this.shipMoveSpeed = 5;
@@ -33,77 +39,75 @@ function GameCore(){
 	this.enemies = [];
 	this.enemiesFallingSpeed = 1;
     this.lastEnemyAppear = null;
-	
 	this.pressedKeys = {};
-	this.gameCanvas =  null;
+	this.gameCanvas = null;
 	
-	this.pressed=function(keyCode){
-		this.pressedKeys[keyCode]=true;
+	/**
+	 * Functions for iteration with the client
+	 */
+	this.pressed = function(keyCode){
+		this.pressedKeys[keyCode] = true;
 		if(currentState() && currentState().keyDown){
-			currentState().keyDown(this,keyCode);
+			currentState().keyDown(this, keyCode);
 		}
 	};
 	
-	this.released=function(keyCode){
+	this.released = function(keyCode){
 		delete this.pressedKeys[keyCode];
 		if(currentState() && currentState().keyUp){
-			currentState().keyUp(this,keyCode);
+			currentState().keyUp(this, keyCode);
 		}
 	};
 }
 
 function initGame(){
-	
-	/*
-	 * За да избегнем проблеми с някой браузъри - на основните бутони 
-	 * на играта (стрелките наляво / надясно и спейс им изключваме 
-	 * основните функций / events, като запомняме натиснатият бутон и 
-	 * го използваме по-късно в играта... до колкото е възможно.
+	/**
+	 * To prevent problems with some browsers - we clear the default
+	 * functions / events for the main buttons (left and right arrow,
+	 * and space). We save the pressed button and we used it later in the game.
 	 * 32: space
-	 * 37: стрелка - наляво
-	 * 39: стрелка - надясно
+	 * 37: left arrow
+	 * 39: right arrow
 	 */
-	window.addEventListener("keydown",function keydown(e){
-		var keycode=e.which || window.event.keycode;
-		if(keycode == 32 || keycode == 37 || keycode == 39)e.preventDefault();
+	window.addEventListener('keydown', function keydown(e){
+		var keycode = e.which || window.event.keycode;
+		if(keycode == 32 || keycode == 37 || keycode == 39){
+			e.preventDefault();
+		}
+		
 		game.pressed(keycode);
 	});
 
-	window.addEventListener("keyup",function keydown(e){
+	window.addEventListener('keyup', function keydown(e){
 		var keycode = e.which || window.event.keycode;
 		game.released(keycode);
 	});
 	
-	// Хващаме основният канвас в променлива "canvas" и му подаваме основни параметри.
-
-	var canvas=document.getElementById("mainCanvas");
-	canvas.width=800;
-	canvas.height=600;
+	/**
+	 * We get the main canvas into the variable "canvas" and we set its parameters
+	 */
+	var canvas = document.getElementById("mainCanvas");
+	canvas.width = 800;
+	canvas.height = 600;
 	
 	game.gameCanvas = canvas;
-	
 }
 
-/*
- * Стартиране на играта
+/**
+ * Start the game with welcome window before playing
  */
-
 function startGame(){
-	
 	setState(new Welcome());
 
-	this.intervalId=setInterval(
-		function(){
+	this.intervalId = setInterval(function(){
 			MainLoop(game);
 		},20);
 }
 
-/*
- * Основният loop, изпълнява се постоянно и проверява за състоянието 
- * на играта, което трябва да извиква. Състоянията се пазят в масив.
- * 
+/**
+ * Main loop, where the condition is checked and it is running until
+ * we get different state. The states are kept in array.
  */
-
 function MainLoop(game){
 	if(currentState()){
 		var time = 0.04;
@@ -112,16 +116,16 @@ function MainLoop(game){
 		if(currentState().update){
 			currentState().update(game,time);
 		}
+		
 		if(currentState().draw){
 			currentState().draw(game,time,ctx);
 		}
 	}
 }
 
-/*
- * Връща текущото състояние на играта.
+/**
+ * Returns the current state of the game
  */
-
 function currentState(){
 	if(game.stateStack.length > 0){
 		return game.stateStack[game.stateStack.length - 1];
@@ -131,11 +135,9 @@ function currentState(){
 	}
 }
 
-/*
- * Записва ново състояние на играта, като премахва предишното 
- * ако го има. 
+/**
+ * This function set a new state and erase the old one, if there is such. 
  */
-
 function setState(state){
 	if(currentState()){	
 		game.stateStack.pop();
@@ -144,9 +146,8 @@ function setState(state){
 	game.stateStack.push(state);
 }
 
-/*
- * Метод за спиране / пауза на играта, поне за момента не се 
- * използва никъде. Но може да се приложи.
+/**
+ * Function for stop/pause the game, for the moment it is not used, but it can be attached.
  */
 function Stop(){
 	clearInterval(game.intervalId);

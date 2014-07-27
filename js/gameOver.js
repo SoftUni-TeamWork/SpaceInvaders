@@ -9,10 +9,7 @@
  * @since   2014-07-26
  *
  */
-
 function GameOver(){
-
-
 	/**
 	 *
 	 * <h1> Draw method </h1>
@@ -25,23 +22,19 @@ function GameOver(){
 	 * @param ctx This parameter is the main Canvas context object.
 	 *
 	 */
-
-	this.draw=function(game,time,ctx){
-
+	this.draw=function(game, time, ctx){
 		ctx.clearRect(0, 0, game.width, game.height);
-		ctx.font="28px Arial";
-		ctx.fillStyle="#FFFFFF";
-		ctx.textBaseline="center";
-		ctx.textAlign="center";
-		ctx.fillText("Game Over",game.width / 2,game.height/2 - 70);
-		ctx.font="23px Arial";
-		ctx.fillText("Your score is: "+game.playerScore,game.width / 2,game.height/2 - 40);
-		ctx.font="16px Arial";
-		ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2);
-
+		ctx.font = "28px Arial";
+		ctx.fillStyle = "#FFFFFF";
+		ctx.textBaseline = "center";
+		ctx.textAlign = "center";
+		ctx.fillText("Game Over", game.width / 2, game.height / 2 - 70);
+		ctx.font = "23px Arial";
+		
+		ctx.fillText("Your score is: " + game.playerScore, game.width / 2, game.height / 2 - 40);
+		ctx.font = "16px Arial";
+		ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height / 2);
 	};
-
-
 
 	/**
 	 *
@@ -55,17 +48,14 @@ function GameOver(){
 	 * @param keyCode This parameter reads the key pressed.
 	 *
 	 */
-
-	this.keyDown=function(game,keyCode){
+	this.keyDown=function(game, keyCode){
 		if(keyCode == 32){
-
-			game.playerScore=0;
-			game.currentLevel=1;
-			game.currentLives=3;
-			game.playerShipHealth=game.defaultShipHealth;
+			game.playerScore = 0;
+			game.currentLevel = 1;
+			game.currentLives = 3;
+			game.playerShipHealth = game.defaultShipHealth;
 
 			setState(new Play());
 		}
 	};
-	
 }

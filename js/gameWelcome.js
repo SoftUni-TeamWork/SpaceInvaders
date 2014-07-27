@@ -9,10 +9,7 @@
  * @since   2014-07-23
  *
  */
-
 function Welcome(){
-
-
 	/**
 	 *
 	 * <h1> Draw method </h1>
@@ -25,19 +22,16 @@ function Welcome(){
 	 * @param ctx This parameter is the main Canvas context object.
 	 *
 	 */
-
-	this.draw=function(game,time,ctx){
+	this.draw = function(game,time,ctx){
 		ctx.clearRect(0, 0, game.width, game.height);
 		ctx.font="28px Arial";
 		ctx.fillStyle="#ffffff";
 		ctx.textBaseline="center";
 		ctx.textAlign="center";
-		ctx.fillText("Team Dobrovolski game",game.width / 2,game.height/2 - 40);
+		ctx.fillText("Team Dobrovolski game", game.width / 2, game.height/2 - 40);
 		ctx.font="16px Arial";
-		ctx.fillText("Натиснете 'Space' за да играете.", game.width / 2, game.height/2);
+		ctx.fillText("Press 'Space' to play.", game.width / 2, game.height/2);
 	};
-
-
 
 	/**
 	 *
@@ -51,11 +45,9 @@ function Welcome(){
 	 * @param keyCode This parameter reads the key pressed.
 	 *
 	 */
-
-	this.keyDown=function(game,keyCode){
+	this.keyDown = function(game,keyCode){
 		if(keyCode == 32){
 			setState(new Play());
 		}
 	};
-	
 }

@@ -9,9 +9,7 @@
  * @version 0.1
  * @since   2014-07-22
  */
-
 function Play() {
-
 	/**
 	 * <h1>Game Background Image</h1>
 	 * We attach the game background image here.
@@ -19,21 +17,20 @@ function Play() {
 	 * @author Asen Nikolov
 	 * @type {Image}
 	 */
-
 	var background = new Image();
 	background.src = "./images/Background.jpg";
 
 	game.ship = new Ship(game.width / 2, game.borders.bottom);
 
 	/**
-	 *
-	 * нов обект тип враг
-	 *
+	 * Creation of new enemy on random position 
 	 */
-
-	game.enemies.push(new Enemy((Math.random() * 100),10,70,10));
+	game.enemies.push(new Enemy((Math.random() * 100), 10, 70, 10));
 	game.lastEnemyAppear = (new Date()).valueOf();
 
+	/**
+	 * Main images are selected here, and used later in the game
+	 */
 	var enemyImg = new Image();
 	enemyImg.src = './images/Enemy.png';
 
@@ -63,58 +60,53 @@ function Play() {
 	 * @param dt This parameter will not be used in future
 	 * @param ctx This parameter is the main Canvas context object.
 	 */
-
 	this.draw = function(game, dt, ctx){
-
-		// Clean all
 		ctx.clearRect(0, 0, game.width, game.height);
-
-
+		
 		/**
 		 * Game background
 		 */
-
 		ctx.drawImage(background, 0, 0);
 		ctx.fillStyle = '#555555';
 		
-		/*
+		/**
 		 * Here we show the rest of the lives with images
 		 */
 		function getLives(){
 			if(game.currentLives == 3){
-				for(var i = 0; i < 3; i+=1){
-					ctx.drawImage(fullHealthImg,50 + i*fullHealthImg.width,10,fullHealthImg.width,fullHealthImg.height);
+				for(var i = 0; i < 3; i += 1){
+					ctx.drawImage(fullHealthImg, 50 + i * fullHealthImg.width, 10, fullHealthImg.width, fullHealthImg.height);
 				}
 			}
 			else if(game.currentLives == 2){
-				for(var i = 0; i < 2; i+=1){
-					ctx.drawImage(fullHealthImg,50 + i*fullHealthImg.width,10,fullHealthImg.width,fullHealthImg.height);
+				for(var i = 0; i < 2; i += 1){
+					ctx.drawImage(fullHealthImg, 50 + i * fullHealthImg.width, 10, fullHealthImg.width, fullHealthImg.height);
 				}
-				ctx.drawImage(emptyHealthImg,50 + 2*emptyHealthImg.width,10,emptyHealthImg.width,emptyHealthImg.height);
+				
+				ctx.drawImage(emptyHealthImg, 50 + 2 * emptyHealthImg.width, 10, emptyHealthImg.width, emptyHealthImg.height);
 			}
 			else if(game.currentLives == 1){
-				ctx.drawImage(fullHealthImg,50,10,fullHealthImg.width,fullHealthImg.height);
-				for(var i = 1; i < 3; i+=1){
-					ctx.drawImage(emptyHealthImg,50 + i*emptyHealthImg.width,10,emptyHealthImg.width,emptyHealthImg.height);
+				ctx.drawImage(fullHealthImg, 50, 10, fullHealthImg.width, fullHealthImg.height);
+				for(var i = 1; i < 3; i += 1){
+					ctx.drawImage(emptyHealthImg, 50 + i * emptyHealthImg.width, 10, emptyHealthImg.width, emptyHealthImg.height);
 				}
 			}
 		};
 		
-		/*
+		/**
 		 * Here we show the rest of the lives of the boss
 		 */
 		function showBossLives(){
-			for(var i = 0; i < game.boss.health; i+=1){
-				ctx.drawImage(bossHealthImg,200 + i*bossHealthImg.width,50,bossHealthImg.width,bossHealthImg.height);
+			for(var i = 0; i < game.boss.health; i += 1){
+				ctx.drawImage(bossHealthImg, 200 + i * bossHealthImg.width, 50, bossHealthImg.width, bossHealthImg.height);
 			}
 		};
 
-		/*
+		/**
 		 * Here we Draw all the player's info
 		 */
-
 		var textYposition = game.borders.top + 10;
-		ctx.font="14px Arial";
+		ctx.font = "14px Arial";
 		ctx.fillStyle = '#ffffff';
 		var info = "Lives:          ";
 		getLives();
@@ -127,6 +119,9 @@ function Play() {
 
 		ctx.drawImage(ourShipImg, game.ship.x - (game.ship.width / 2), game.ship.y - (game.ship.height / 2), game.ship.width, game.ship.height);
 
+		/**
+		 * Boss appears when the level is > 4
+		 */
 		if(game.boss != null) {
 			if (game.boss.health > 0){
 				ctx.drawImage(bossImg, game.boss.x - (game.boss.width / 2), game.boss.y - (game.ship.height / 2), game.boss.width, game.boss.height);
@@ -134,13 +129,14 @@ function Play() {
 				showBossLives();
 				ctx.fillText(bossHealth, ((game.width / 2) - 10), game.borders.top + 30);
 			}
+			
 			if(game.boss.health == 0){
 				game.boss = null;
 			}
 		}
 
 		ctx.fillStyle = '#ff0000';
-
+		
 		for(var i = 0; i < game.bullets.length; i++){
 			var bullet = game.bullets[i];
 			ctx.fillRect(bullet.x, bullet.y - 2, 2, 6);
@@ -151,28 +147,31 @@ function Play() {
 			ctx.drawImage(enemyImg,enemy.x,enemy.y,enemy.width,enemy.height);
 		}
 	};
-
-
+	
 	/**
-	 * This method changes the possition of the ship, bullets, enemies.
+	 * This method changes the position of the ship, bullets, enemies.
 	 * It refreshes on every 50ms.
 	 */
-
 	this.update = function(game){
-
-		if(game.pressedKeys[37]){ // Left arrow - moves the ship to the left
+		// Left arrow - moves the ship to the left
+		if(game.pressedKeys[37]){ 
 			game.ship.x -= ( game.shipMoveSpeed + (game.currentLevel / 2) );
 		}
 
-		if(game.pressedKeys[39]){ // Right arrow - moves the ship to the right
+		// Right arrow - moves the ship to the right
+		if(game.pressedKeys[39]){ 
 			game.ship.x += ( game.shipMoveSpeed + (game.currentLevel / 2) );
 		}
 
-		if(game.ship.x < game.borders.left)game.ship.x=game.borders.left;
-		if(game.ship.x > game.borders.right)game.ship.x=game.borders.right;
+		if(game.ship.x < game.borders.left){
+			game.ship.x = game.borders.left;
+		}
+		
+		if(game.ship.x > game.borders.right){
+			game.ship.x = game.borders.right;
+		}
 
-
-		for (i = 0; i < game.bullets.length; i++){
+		for (var i = 0; i < game.bullets.length; i++){
 			var bullet = game.bullets[i];
 			bullet.y -= game.bulletSpeed;
 
@@ -185,24 +184,19 @@ function Play() {
 			var enemy = game.enemies[j];
 			enemy.y += (game.enemiesFallingSpeed + (game.currentLevel ));
 
-
 			/**
 			 * Ships health is decreasing on ship/enemy collisions
 			 */
-
-			if(
-				(enemy.x + enemy.width) > (game.ship.x - game.ship.width/2) &&
-				(enemy.x) < (game.ship.x + game.ship.width/2.3) &&
-				(enemy.y + (enemy.height + 7)) >= game.ship.y ){
+			if((enemy.x + enemy.width) > (game.ship.x - game.ship.width / 2) &&
+			   (enemy.x) < (game.ship.x + game.ship.width / 2.3) &&
+			   (enemy.y + (enemy.height + 7)) >= game.ship.y){
 					game.playerShipHealth--;
 					game.enemies.splice(j--,1);
-
-	        }else{
-
+	        }
+			else{
 				/**
 				 * Remove the enemy's ship if reach the bottom's border of the game frame.
 				 */
-
 				if(enemy.y >= game.borders.bottom) {
 					game.enemies.splice(j--, 1);
 					game.playerShipHealth--; //If the player haven't destroyed the enemy on time, his health is decreasing
@@ -212,49 +206,49 @@ function Play() {
 			/**
 			 * This feature destroys the enemy
 			 */
-
 			var boom = false;
 
-			for(var i=0; i<game.bullets.length; i++){
+			for(var i = 0; i < game.bullets.length; i++){
 				var bullet = game.bullets[i];
 
-				if((bullet.x >= enemy.x) && (bullet.x <= (enemy.x + enemy.width) ) && (bullet.y <= (enemy.y + (enemy.height - 20) )) ){
-
+				if((bullet.x >= enemy.x) && (bullet.x <= (enemy.x + enemy.width)) && (bullet.y <= (enemy.y + (enemy.height - 20)))){
 					game.bullets.splice(i--,1);
 					boom = true;
 					game.playerScore++;
 					break;
 				}
 			}
-			if(boom == true)game.enemies.splice(j--,1);
+			
+			if(boom == true){
+				game.enemies.splice(j--,1);
+			}
 		}
-
-
+		
+		/**
+		 * Here we see if the bullet has hitted the boss
+		 */
 		if (game.boss != null) {
-
-			for(var i=0; i<game.bullets.length; i++){
-
+			for(var i = 0; i < game.bullets.length; i++){
 				var bullet = game.bullets[i];
 
-				if(
-					(bullet.x >= (game.boss.x - (game.boss.width / 2))) &&
-					(bullet.x <= (game.boss.x + (game.boss.width / 2)) ) &&
-					(bullet.y <= (game.boss.y + (game.boss.height - 10) )) ){
-
+				if((bullet.x >= (game.boss.x - (game.boss.width / 2))) &&
+				   (bullet.x <= (game.boss.x + (game.boss.width / 2))) &&
+				   (bullet.y <= (game.boss.y + (game.boss.height - 10)))){
 						game.bullets.splice(i--,1);
 						game.boss.health--;
 						game.playerScore++;
 						break;
 				}
 			}
-
 		}
-
+		
+		/**
+		 * Changes of player statistics:
+		 */
 		if (game.playerScore > game.riseLevelOnScore) {
-			game.playerScore=0;
+			game.playerScore = 0;
 			game.currentLevel++;
 		}
-
 
 		if (game.playerShipHealth < 0) {
 			game.playerShipHealth = game.defaultShipHealth;
@@ -262,11 +256,9 @@ function Play() {
 		}
 
 		if (game.currentLevel > 4) {
-
 			this.boss();
-
-		}else{
-
+		}
+		else{
 			if (((new Date()).valueOf() - game.lastEnemyAppear) > 2000){
 				this.newEnemy();
 			}
@@ -284,22 +276,18 @@ function Play() {
 		}
 	};
 
-
 	/**
 	 * This method shoots bullets on pressed SpaceBar button
 	 */
-
 	this.keyDown = function(game, keyCode){
 		if (keyCode == 32){
 			this.fireRocket();
 		}
 	};
 
-
 	/**
 	 * This method simulates shooting and shoots on all 200ms.
 	 */
-
 	this.fireRocket = function(){
 		if (game.lastShootTime === null || ((new Date()).valueOf() - game.lastShootTime) > 200) {
 			game.bullets.push(new Bullet(game.ship.x, game.ship.y - 12, 150));
@@ -307,45 +295,52 @@ function Play() {
 		}
 	};
 
-
 	/**
-	 * с този метод се извиква и създава нова ГАД!
+	 * This method creates new enemy on every 2000 ms
 	 */
 	this.newEnemy = function(){
 		var newX = Math.random() * 750;
 		game.enemies.push(new Enemy(newX, 20, (game.currentLevel * 50), (game.currentLevel * 10)));
 		game.lastEnemyAppear = (new Date()).valueOf();
 	};
-
+	
+	/**
+	 * Function for creation of the boss, after the level 5 is reached
+	 */
 	this.boss = function(){
-
 		if(game.boss == null){
 			game.boss = new Boss(game.width / 2, 20, (new Date()).valueOf());
 		}
 
 		if(game.boss.y < (game.height / 3)){
 			game.boss.y++;
-		}else{
+		}
+		else{
 			var movement = (Math.random() * 100) + 1;
 			if (movement < 50) {
-				if (game.boss.x < game.borders.left + game.boss.width)
+				if (game.boss.x < game.borders.left + game.boss.width){
 					game.boss.x = game.borders.left + game.boss.width;
+				}
 				else {
 					if (game.boss.lastMovement == null || (new Date()).valueOf() - game.boss.lastMovement > 400) {
 						for(var k = 1; k <= 20; k++) {
 							game.boss.x = game.boss.x + 0.5;
 						}
+						
 						game.boss.lastMovement = (new Date()).valueOf();
 					}
 				}
-			} else {
-				if (game.boss.x > game.borders.right + game.boss.width)
+			} 
+			else {
+				if (game.boss.x > game.borders.right + game.boss.width){
 					game.boss.x = game.borders.right - game.boss.width;
+				}
 				else {
 					if (game.boss.lastMovement == null || (new Date()).valueOf() - game.boss.lastMovement > 400) {
 						for(var j = 1; j <= 20; j++) {
 							game.boss.x = game.boss.x - 0.5;
 						}
+						
 						game.boss.lastMovement = (new Date()).valueOf();
 					}
 				}
@@ -355,9 +350,9 @@ function Play() {
 }
 
 /**
- * Функция за дефиниране на кораба
- * Очаква параметри "x" и "y", който определят началната позиция
- * на кораба, също има и допълнителни настройки за размери.
+ * Function for defining the ship, it takes "x" and "y",
+ * which are the start position of the ship.
+ * It also has fixed size.
  */
 function Ship(x, y) {
 	this.x = x;
@@ -367,9 +362,8 @@ function Ship(x, y) {
 }
 
 /**
- * Функция за създаване на патрони
- * Това са патроните, които се изстрелват от кораба, имат позиция
- * както и скорост на движение
+ * Function for creation of bullets.
+ * Like the ship, they have start position, but also and speed.
  */
 function Bullet(x, y, velocity) {
 	this.x = x;
@@ -377,13 +371,23 @@ function Bullet(x, y, velocity) {
 	this.velocity = velocity;
 }
 
+/**
+ * Function for creation of enemies.
+ * They have start position, speed, score and size.
+ */
 function Enemy(x, y, velocity, score) {
 	this.x = x;
 	this.y = y;
 	this.velocity = velocity;
+	this.score = score;
 	this.width = 29;
 	this.height = 36;
 }
+
+/**
+ * Function for creation of the boss.
+ * Unlike the enemies, it has health.
+ */
 function Boss(x, y, score, lastMovement) {
 	this.x = x;
 	this.y = y;
