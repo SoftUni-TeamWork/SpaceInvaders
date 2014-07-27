@@ -324,7 +324,7 @@ function Play() {
 					break;
 				}
 				
-				if(game.boss.x == rightBorder && game.boss.direction == 'right'){
+				if(game.boss.x >= rightBorder && game.boss.direction == 'right'){
 					game.boss.direction = 'left';
 					break;
 				}
@@ -334,7 +334,7 @@ function Play() {
 					break;
 				}
 				
-				if(game.boss.x == leftBorder && game.boss.direction == 'left'){
+				if(game.boss.x <= leftBorder && game.boss.direction == 'left'){
 					game.boss.direction = 'right';
 					break;
 				}
@@ -390,5 +390,5 @@ function Boss(x, y, score, direction) {
 	this.score = score;
 	this.direction = direction;
 	this.health = 30;
-	this.velocity = 2;
+	this.velocity = 2.5;
 }
