@@ -309,40 +309,34 @@ function Play() {
 	 */
 	this.boss = function(){
 		if(game.boss == null){
-			game.boss = new Boss(game.width / 2, 20, (new Date()).valueOf());
+			game.boss = new Boss(game.width / 2, 20, (new Date()).valueOf(), 'left');
 		}
 
 		if(game.boss.y < (game.height / 3)){
 			game.boss.y++;
 		}
 		else{
-			var movement = (Math.random() * 100) + 1;
-			if (movement < 50) {
-				if (game.boss.x < game.borders.left + game.boss.width){
-					game.boss.x = game.borders.left + game.boss.width;
+			var leftBorder = 200;
+			var rightBorder = 500;
+			while(true){
+				if(game.boss.x < rightBorder && game.boss.direction == 'right'){
+					game.boss.x += game.boss.velocity;
+					break;
 				}
-				else {
-					if (game.boss.lastMovement == null || (new Date()).valueOf() - game.boss.lastMovement > 400) {
-						for(var k = 1; k <= 20; k++) {
-							game.boss.x = game.boss.x + 0.5;
-						}
-						
-						game.boss.lastMovement = (new Date()).valueOf();
-					}
+				
+				if(game.boss.x == rightBorder && game.boss.direction == 'right'){
+					game.boss.direction = 'left';
+					break;
 				}
-			} 
-			else {
-				if (game.boss.x > game.borders.right + game.boss.width){
-					game.boss.x = game.borders.right - game.boss.width;
+				
+				if(game.boss.x > leftBorder && game.boss.direction == 'left'){
+					game.boss.x -= game.boss.velocity;
+					break;
 				}
-				else {
-					if (game.boss.lastMovement == null || (new Date()).valueOf() - game.boss.lastMovement > 400) {
-						for(var j = 1; j <= 20; j++) {
-							game.boss.x = game.boss.x - 0.5;
-						}
-						
-						game.boss.lastMovement = (new Date()).valueOf();
-					}
+				
+				if(game.boss.x == leftBorder && game.boss.direction == 'left'){
+					game.boss.direction = 'right';
+					break;
 				}
 			}
 		}
@@ -388,12 +382,13 @@ function Enemy(x, y, velocity, score) {
  * Function for creation of the boss.
  * Unlike the enemies, it has health.
  */
-function Boss(x, y, score, lastMovement) {
+function Boss(x, y, score, direction) {
 	this.x = x;
 	this.y = y;
 	this.width = 70;
 	this.height = 113;
 	this.score = score;
-	this.lastMovement = lastMovement;
+	this.direction = direction;
 	this.health = 30;
+	this.velocity = 2;
 }

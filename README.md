@@ -27,7 +27,6 @@ TODO:
 =========
 <p>
 <ol>
-<li>Write comments wherever it's possible. Use JAVA style.</li>
-<li>To improve the game visual info ( Lives / Level / Score and others )</li>
+<li>It remains the boss to fire against us</li>
 </ol>
 </p>
