@@ -284,6 +284,7 @@ function Play() {
 		}
 
 		if (game.currentLives < 1){
+			game.boss = null;
 			setState(new GameOver());
 		}
 
