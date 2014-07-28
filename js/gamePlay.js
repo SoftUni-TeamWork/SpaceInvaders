@@ -173,16 +173,20 @@ function Play() {
 
 		for (var i = 0; i < game.bullets.length; i++){
 			var bullet = game.bullets[i];
-			bullet.y -= game.bulletSpeed;
+			bullet.y -= game.bullets[i].velocity;
 
 			if(bullet.y < 5){
+				game.bullets.splice(i--, 1);
+			}
+			
+			if(bullet.y > game.ship.y){
 				game.bullets.splice(i--, 1);
 			}
 		}
 
 		for(var j = 0; j < game.enemies.length; j++) {
 			var enemy = game.enemies[j];
-			enemy.y += (game.enemiesFallingSpeed + (game.currentLevel ));
+			enemy.y += (game.enemiesFallingSpeed + (game.currentLevel));
 
 			/**
 			 * Ships health is decreasing on ship/enemy collisions
@@ -243,6 +247,21 @@ function Play() {
 		}
 		
 		/**
+		 * Here we see if the boss has hitted us
+		 */
+		for(var i = 0; i < game.bullets.length; i++){
+			var bullet = game.bullets[i];
+
+			if((bullet.x >= (game.ship.x - (game.ship.width / 2))) &&
+			   (bullet.x <= (game.ship.x + (game.ship.width / 2))) &&
+			   (bullet.y >= game.height - game.ship.height / 2)){
+					game.bullets.splice(i--,1);
+					game.playerShipHealth--;
+					break;
+			}
+		}
+		
+		/**
 		 * Changes of player statistics:
 		 */
 		if (game.playerScore > game.riseLevelOnScore) {
@@ -290,7 +309,7 @@ function Play() {
 	 */
 	this.fireRocket = function(){
 		if (game.lastShootTime === null || ((new Date()).valueOf() - game.lastShootTime) > 200) {
-			game.bullets.push(new Bullet(game.ship.x, game.ship.y - 12, 150));
+			game.bullets.push(new Bullet(game.ship.x, game.ship.y - 12, game.bulletSpeed));
 			game.lastShootTime = (new Date()).valueOf();
 		}
 	};
@@ -338,6 +357,13 @@ function Play() {
 					game.boss.direction = 'right';
 					break;
 				}
+			}
+			
+			/**
+			 * Each 35 pixels the boss is firing upon our ship
+			 */
+			if(game.boss.x % 35 == 0){
+				game.bullets.push(new Bullet(game.boss.x, game.boss.y + game.boss.height, -10));
 			}
 		}
 	};
