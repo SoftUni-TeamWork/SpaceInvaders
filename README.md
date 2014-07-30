@@ -4,7 +4,7 @@ SpaceInvaders
 
 <p>
 You can use this link to test directly the game from GitHub:
-<a href="http://htmlpreview.github.io/?https://github.com/SoftUni-TeamWork/SampleGame/blob/master/index.html" target="_blank"> link </a>
+<a href="http://asen-nikolov.eu/works/JS-teamwork/index.html" target="_blank"> link </a>
 </p>
 
 
